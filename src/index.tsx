@@ -25,6 +25,7 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
     const {
       parameters: { installation },
     } = sdk
+    console.error('TICK', env)
     const { gitlabBadgeUrlPreprod, gitlabBadgeUrlProduction } = installation
     const badgeUrl = env === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
     setImage(`${badgeUrl}?date=${Date.now()}`)
@@ -82,7 +83,7 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
             setTimeout(() => {
               tick()
               triggerUpdate()
-            }, 2000)
+            }, 1000)
           } else {
             sdk.notifier.error('Impossible de déployer le site !')
           }
