@@ -101,6 +101,7 @@ console.error('onButtonClick() environment', environment)
       <Dropdown
         isOpen={isOpen}
         isAutoalignmentEnabled={false}
+        onClose={() => on(false)}
         isFullWidth={true}
         key={Date.now()}
         className="dropdownwidth"
