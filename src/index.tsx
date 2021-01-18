@@ -14,9 +14,8 @@ import {
 interface AppProps {
   sdk: FieldExtensionSDK
 }
-// https://gitlab.com/%{project_path}/badges/%{default_branch}/pipeline.svg
-// repo.betc.fr/betc-consultants-technique/elle-et-vire-concours-cuisine
-https: const SidebarExtension: FC<AppProps> = (props: AppProps) => {
+
+const SidebarExtension: FC<AppProps> = (props: AppProps) => {
   const { sdk } = props
   const [env, setEnv] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
@@ -65,21 +64,20 @@ https: const SidebarExtension: FC<AppProps> = (props: AppProps) => {
       const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
       const badgeUrl = environment === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
 
-      setEnv(environment)
-      setImage(`${badgeUrl}?date=${Date.now()}`)
-      setIsOpen(false)
+      const formData = new FormData()
+      formData.append('ref', environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction)
+      formData.append('token', gitlabPipelineTriggerToken)
+      formData.append('variables[PREVIEW]', '0')
 
       const pipelineOptions = {
-        body: {
-          ref: environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction,
-          token: gitlabPipelineTriggerToken,
-          variables: {
-            PREVIEW: 0,
-          },
-        },
+        body: formData,
         method: 'POST',
         headers: {},
       }
+
+      setEnv(environment)
+      setImage(`${badgeUrl}?date=${Date.now()}`)
+      setIsOpen(false)
 
       fetch(pipelineUrl, pipelineOptions)
         .then((r) => {
