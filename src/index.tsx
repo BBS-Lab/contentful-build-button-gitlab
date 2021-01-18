@@ -21,99 +21,86 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [buildEnv, setBuildEnv] = useState(null)
 
-  const {
-    parameters: { installation },
-  } = sdk
+  const tick = () => {
+    const {
+      parameters: { installation },
+    } = sdk
+console.error('tick() buildEnv', buildEnv)
 
-  const {
-    gitlabBaseUrl,
-    gitlabProjectId,
-    gitlabPipelineTriggerToken,
-    gitlabPipelineRefPreprod,
-    gitlabPipelineRefProduction,
-    gitlabBadgeUrlPreprod,
-    gitlabBadgeUrlProduction,
-  } = installation
+    const { gitlabBadgeUrlPreprod, gitlabBadgeUrlProduction } = installation
+    const badgeUrl = buildEnv === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
 
-  const tick = () =>
-    useCallback(() => {
-      const badgeUrl = buildEnv === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
-      setImage(`${badgeUrl}?date=${Date.now()}`)
-    }, [buildEnv, gitlabBadgeUrlPreprod, gitlabBadgeUrlProduction])
+    setImage(`${badgeUrl}?date=${Date.now()}`)
+  }, [sdk, buildEnv, setImage])
 
   const triggerUpdate = useCallback(() => {
     setInterval(tick, 10000)
   }, [tick])
 
-  const onClick = useCallback(
-    (open: Boolean) => {
-      setIsOpen(open)
-    },
-    [setIsOpen]
-  )
+  const onClick = useCallback((open: Boolean) => {
+    setIsOpen(open)
+  }, [setIsOpen])
 
   const onToogle = useCallback(() => {
     onClick(!isOpen)
   }, [isOpen, onClick])
 
-  const onButtonClick = useCallback(
-    (environment) => {
-      setIsOpen(false)
-      setBuildEnv(environment)
+  const onButtonClick = useCallback((environment) => {
+    const {
+      parameters: { installation },
+    } = sdk
+console.error('onButtonClick() environment', environment)
 
-      const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
-      const pipelineRef =
-        environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction
-
-      const formData = new FormData()
-      formData.append('ref', pipelineRef)
-      formData.append('token', gitlabPipelineTriggerToken)
-      formData.append('variables[PREVIEW]', '0')
-
-      const pipelineOptions = {
-        body: formData,
-        method: 'POST',
-        headers: {},
-      }
-
-      fetch(pipelineUrl, pipelineOptions)
-        .then((r) => {
-          if (r.ok) {
-            sdk.notifier.success('Site en cours de déploiement...')
-            setTimeout(() => {
-              tick()
-              triggerUpdate()
-            }, 1000)
-          } else {
-            console.error('ERROR', r)
-            sdk.notifier.error('Impossible de déployer le site !')
-          }
-        })
-        .catch((e) => {
-          console.error('ERROR', pipelineUrl, pipelineOptions)
-          console.error('ERROR', e)
-          sdk.notifier.error('Impossible de déployer le site !')
-        })
-    },
-    [
-      setIsOpen,
-      setBuildEnv,
-      tick,
-      triggerUpdate,
+    const {
       gitlabBaseUrl,
       gitlabProjectId,
       gitlabPipelineTriggerToken,
       gitlabPipelineRefPreprod,
       gitlabPipelineRefProduction,
-    ]
-  )
+    } = installation
+
+    setIsOpen(false)
+    setBuildEnv(environment)
+
+    const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
+    const pipelineRef = environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction
+
+    const formData = new FormData()
+    formData.append('ref', pipelineRef)
+    formData.append('token', gitlabPipelineTriggerToken)
+    formData.append('variables[PREVIEW]', '0')
+
+    const pipelineOptions = {
+      body: formData,
+      method: 'POST',
+      headers: {},
+    }
+
+    fetch(pipelineUrl, pipelineOptions)
+      .then((r) => {
+        if (r.ok) {
+          sdk.notifier.success('Site en cours de déploiement...')
+          setTimeout(() => {
+            tick()
+            triggerUpdate()
+          }, 1000)
+        } else {
+          console.error('ERROR', r)
+          sdk.notifier.error('Impossible de déployer le site !')
+        }
+      })
+      .catch((e) => {
+        console.error('ERROR', pipelineUrl, pipelineOptions)
+        console.error('ERROR', e)
+        sdk.notifier.error('Impossible de déployer le site !')
+      })
+  }, [sdk, setIsOpen, setBuildEnv, tick, triggerUpdate])
 
   return (
     <div className="container-width">
       <Dropdown
         isOpen={isOpen}
         isAutoalignmentEnabled={false}
-        onClose={() => on(false)}
         isFullWidth={true}
         key={Date.now()}
         className="dropdownwidth"
