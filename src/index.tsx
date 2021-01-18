@@ -17,22 +17,29 @@ interface AppProps {
 
 const SidebarExtension: FC<AppProps> = (props: AppProps) => {
   const { sdk } = props
-  const [buildEnv, setBuildEnv] = useState(null)
-  const [isOpen, setIsOpen] = useState(false)
   const [image, setImage] = useState(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [buildEnv, setBuildEnv] = useState(null)
 
-  const tick = () => {
-    const {
-      parameters: { installation },
-    } = sdk
-    
-    console.error('TICK', buildEnv)
+  const {
+    parameters: { installation },
+  } = sdk
 
-    const { gitlabBadgeUrlPreprod, gitlabBadgeUrlProduction } = installation
-    const badgeUrl = buildEnv === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
+  const {
+    gitlabBaseUrl,
+    gitlabProjectId,
+    gitlabPipelineTriggerToken,
+    gitlabPipelineRefPreprod,
+    gitlabPipelineRefProduction,
+    gitlabBadgeUrlPreprod,
+    gitlabBadgeUrlProduction,
+  } = installation
 
-    setImage(`${badgeUrl}?date=${Date.now()}`)
-  }
+  const tick = () =>
+    useCallback(() => {
+      const badgeUrl = buildEnv === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
+      setImage(`${badgeUrl}?date=${Date.now()}`)
+    }, [buildEnv, gitlabBadgeUrlPreprod, gitlabBadgeUrlProduction])
 
   const triggerUpdate = useCallback(() => {
     setInterval(tick, 10000)
@@ -51,23 +58,12 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
 
   const onButtonClick = useCallback(
     (environment) => {
-      const {
-        parameters: { installation },
-      } = sdk
-
-      const {
-        gitlabBaseUrl,
-        gitlabProjectId,
-        gitlabPipelineTriggerToken,
-        gitlabPipelineRefPreprod,
-        gitlabPipelineRefProduction,
-      } = installation
-
       setIsOpen(false)
       setBuildEnv(environment)
 
       const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
-      const pipelineRef = environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction
+      const pipelineRef =
+        environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction
 
       const formData = new FormData()
       formData.append('ref', pipelineRef)
@@ -89,6 +85,7 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
               triggerUpdate()
             }, 1000)
           } else {
+            console.error('ERROR', r)
             sdk.notifier.error('Impossible de déployer le site !')
           }
         })
@@ -98,7 +95,17 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
           sdk.notifier.error('Impossible de déployer le site !')
         })
     },
-    [setIsOpen, setBuildEnv, sdk, tick, triggerUpdate]
+    [
+      setIsOpen,
+      setBuildEnv,
+      tick,
+      triggerUpdate,
+      gitlabBaseUrl,
+      gitlabProjectId,
+      gitlabPipelineTriggerToken,
+      gitlabPipelineRefPreprod,
+      gitlabPipelineRefProduction,
+    ]
   )
 
   return (
