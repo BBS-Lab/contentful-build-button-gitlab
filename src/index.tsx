@@ -19,22 +19,23 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
   const { sdk } = props
   const [image, setImage] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [buildEnv, setBuildEnv] = useState(null)
 
-  const tick = useCallback(() => {
+  const tick = useCallback((environment) => {
     const {
       parameters: { installation },
     } = sdk
-console.error('tick() buildEnv', buildEnv)
+console.error('tick() environment', environment)
 
     const { gitlabBadgeUrlPreprod, gitlabBadgeUrlProduction } = installation
-    const badgeUrl = buildEnv === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
+    const badgeUrl = environment === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
 
     setImage(`${badgeUrl}?date=${Date.now()}`)
-  }, [sdk, buildEnv, setImage])
+  }, [sdk, setImage])
 
-  const triggerUpdate = useCallback(() => {
-    setInterval(tick, 10000)
+  const triggerUpdate = useCallback((environment) => {
+    setInterval(() => {
+      tick(environment)
+    }, 10000)
   }, [tick])
 
   const onClick = useCallback((open: Boolean) => {
@@ -60,7 +61,6 @@ console.error('onButtonClick() environment', environment)
     } = installation
 
     setIsOpen(false)
-    setBuildEnv(environment)
 
     const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
     const pipelineRef = environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction
@@ -81,8 +81,8 @@ console.error('onButtonClick() environment', environment)
         if (r.ok) {
           sdk.notifier.success('Site en cours de déploiement...')
           setTimeout(() => {
-            tick()
-            triggerUpdate()
+            tick(environment)
+            triggerUpdate(environment)
           }, 1000)
         } else {
           console.error('ERROR', r)
@@ -94,7 +94,7 @@ console.error('onButtonClick() environment', environment)
         console.error('ERROR', e)
         sdk.notifier.error('Impossible de déployer le site !')
       })
-  }, [sdk, setIsOpen, setBuildEnv, tick, triggerUpdate])
+  }, [sdk, setIsOpen, tick, triggerUpdate])
 
   return (
     <div className="container-width">
