@@ -61,6 +61,7 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
         gitlabBadgeUrlProduction,
       } = installation
 
+      console.log(environment)
       const badgeUrl = environment === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
 
       setEnv(environment)
