@@ -21,15 +21,18 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [image, setImage] = useState(null)
 
-  const tick = useCallback(() => {
+  const tick = () => {
     const {
       parameters: { installation },
     } = sdk
+    
     console.error('TICK', buildEnv)
+
     const { gitlabBadgeUrlPreprod, gitlabBadgeUrlProduction } = installation
     const badgeUrl = buildEnv === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
+
     setImage(`${badgeUrl}?date=${Date.now()}`)
-  }, [sdk, buildEnv, setImage])
+  }
 
   const triggerUpdate = useCallback(() => {
     setInterval(tick, 10000)
