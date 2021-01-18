@@ -84,8 +84,10 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
         .then((r) => {
           if (r.ok) {
             sdk.notifier.success('Site en cours de déploiement...')
-            tick()
-            triggerUpdate()
+            setTimeout(() => {
+              tick()
+              triggerUpdate()
+            }, 1000)
           } else {
             sdk.notifier.error('Impossible de déployer le site !')
           }
