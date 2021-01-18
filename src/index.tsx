@@ -24,7 +24,6 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
     const {
       parameters: { installation },
     } = sdk
-console.error('tick() environment', environment)
 
     const { gitlabBadgeUrlPreprod, gitlabBadgeUrlProduction } = installation
     const badgeUrl = environment === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
@@ -50,7 +49,6 @@ console.error('tick() environment', environment)
     const {
       parameters: { installation },
     } = sdk
-console.error('onButtonClick() environment', environment)
 
     const {
       gitlabBaseUrl,
