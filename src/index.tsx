@@ -61,8 +61,13 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
         gitlabBadgeUrlProduction,
       } = installation
 
-      const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
       const badgeUrl = environment === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
+
+      setEnv(environment)
+      setImage(`${badgeUrl}?date=${Date.now()}`)
+      setIsOpen(false)
+
+      const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
 
       const formData = new FormData()
       formData.append('ref', environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction)
@@ -74,10 +79,6 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
         method: 'POST',
         headers: {},
       }
-
-      setEnv(environment)
-      setImage(`${badgeUrl}?date=${Date.now()}`)
-      setIsOpen(false)
 
       fetch(pipelineUrl, pipelineOptions)
         .then((r) => {
