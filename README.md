@@ -1,1 +1,7 @@
-# contentful-build-button-gitlab
+# BBS-LAB / Contentful / build-button-gitlab
+
+## Installation
+
+```
+nvm use
+```

@@ -1,0 +1,45 @@
+{
+  "id": "build-button-gitlab",
+  "name": "Déploiement site",
+  "src": "./build/index.html",
+  "sidebar": true,
+  "parameters": {
+    "installation": [
+      {
+        "id": "gitlabBaseUrl",
+        "type": "Symbol",
+        "name": "GITLAB base URL"
+      },
+      {
+        "id": "gitlabProjectId",
+        "type": "Symbol",
+        "name": "GITLAB project ID"
+      },
+      {
+        "id": "gitlabPipelineTriggerToken",
+        "type": "Symbol",
+        "name": "GITLAB pipeline trigger token"
+      },
+      {
+        "id": "gitlabPipelineRefPreprod",
+        "type": "Symbol",
+        "name": "GITLAB pipeline ref (PREPROD)"
+      },
+      {
+        "id": "gitlabPipelineRefProduction",
+        "type": "Symbol",
+        "name": "GITLAB pipeline ref (PRODUCTION)"
+      },
+      {
+        "id": "gitlabBadgeUrlPreprod",
+        "type": "Symbol",
+        "name": "GITLAB badge URL (PREPROD)"
+      },
+      {
+        "id": "gitlabBadgeUrlProduction",
+        "type": "Symbol",
+        "name": "GITLAB badge URL (PRODUCTION)"
+      }
+    ]
+  }
+}
