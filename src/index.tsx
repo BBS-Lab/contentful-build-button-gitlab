@@ -57,15 +57,9 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
         gitlabPipelineTriggerToken,
         gitlabPipelineRefPreprod,
         gitlabPipelineRefProduction,
-        gitlabBadgeUrlPreprod,
-        gitlabBadgeUrlProduction,
       } = installation
 
-      console.error('ENVIRONMENT', environment)
-      const badgeUrl = environment === 'preprod' ? gitlabBadgeUrlPreprod : gitlabBadgeUrlProduction
-
       setEnv(environment)
-      setImage(`${badgeUrl}?date=${Date.now()}`)
       setIsOpen(false)
 
       const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
@@ -88,7 +82,7 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
             setTimeout(() => {
               tick()
               triggerUpdate()
-            }, 1000)
+            }, 2000)
           } else {
             sdk.notifier.error('Impossible de déployer le site !')
           }
@@ -99,7 +93,7 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
           sdk.notifier.error('Impossible de déployer le site !')
         })
     },
-    [setImage, setIsOpen, setEnv, sdk, tick, triggerUpdate]
+    [setEnv, setIsOpen, sdk, tick, triggerUpdate]
   )
 
   return (
