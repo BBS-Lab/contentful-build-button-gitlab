@@ -11,11 +11,6 @@
         "name": "GITLAB base URL"
       },
       {
-        "id": "gitlabProjectId",
-        "type": "Symbol",
-        "name": "GITLAB project ID"
-      },
-      {
         "id": "gitlabPipelineTriggerToken",
         "type": "Symbol",
         "name": "GITLAB pipeline trigger token"
@@ -45,16 +40,11 @@
         "type": "Symbol",
         "name": "GITLAB badge URL (PREPROD)"
       },
-      ({
-        "id": "gitlabBadgeUrlProduction",
-        "type": "Symbol",
-        "name": "GITLAB badge URL (PRODUCTION)"
-      },
       {
         "id": "gitlabBadgeUrlProduction",
         "type": "Symbol",
         "name": "GITLAB badge URL (PRODUCTION)"
-      })
+      }
     ]
   }
 }

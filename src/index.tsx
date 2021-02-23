@@ -52,7 +52,6 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
 
     const {
       gitlabBaseUrl,
-      gitlabProjectId,
       gitlabPipelineTriggerToken,
       gitlabPipelineRefPreprod,
       gitlabPipelineVariablesPreprod,
@@ -62,7 +61,7 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
 
     setIsOpen(false)
 
-    const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
+    const pipelineUrl = `${gitlabBaseUrl}/trigger/pipeline`
     const pipelineRef = environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction
     const variables = environment === 'preprod' ? gitlabPipelineVariablesPreprod : gitlabPipelineVariablesPoduction
 
@@ -71,11 +70,11 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
     formData.append('token', gitlabPipelineTriggerToken)
 
     const splittedVariables = variables.split('&')
-    for (let i = 0 ; i <= splittedVariables.length ; i++) {
+    for (let i = 0 ; i < splittedVariables.length ; i++) {
       const keyVal = splittedVariables[i].split('=')
       formData.append(`variables[${keyVal[0]}]`, keyVal[1])
     }
-
+    
     const pipelineOptions = {
       body: formData,
       method: 'POST',
