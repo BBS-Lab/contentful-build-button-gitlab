@@ -55,18 +55,26 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
       gitlabProjectId,
       gitlabPipelineTriggerToken,
       gitlabPipelineRefPreprod,
+      gitlabPipelineVariablesPreprod,
       gitlabPipelineRefProduction,
+      gitlabPipelineVariablesPoduction,
     } = installation
 
     setIsOpen(false)
 
     const pipelineUrl = `${gitlabBaseUrl}/projects/${gitlabProjectId}/trigger/pipeline`
     const pipelineRef = environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction
+    const variables = environment === 'preprod' ? gitlabPipelineVariablesPreprod : gitlabPipelineVariablesPoduction
 
     const formData = new FormData()
     formData.append('ref', pipelineRef)
     formData.append('token', gitlabPipelineTriggerToken)
-    formData.append('variables[PREVIEW]', '0')
+
+    const splittedVariables = variables.split('&')
+    for (let i = 0 ; i <= splittedVariables.length ; i++) {
+      const keyVal = splittedVariables[i].split('=')
+      formData.append(`variables[${keyVal[0]}]`, keyVal[1])
+    }
 
     const pipelineOptions = {
       body: formData,

@@ -26,20 +26,35 @@
         "name": "GITLAB pipeline ref (PREPROD)"
       },
       {
+        "id": "gitlabPipelineVariablesPreprod",
+        "type": "Symbol",
+        "name": "GITLAB variables (PREPROD) - eg. TAG=1.0&CONTENTFUL_PREVIEW=1"
+      },
+      {
         "id": "gitlabPipelineRefProduction",
         "type": "Symbol",
         "name": "GITLAB pipeline ref (PRODUCTION)"
+      },
+      {
+        "id": "gitlabPipelineVariablesPoduction",
+        "type": "Symbol",
+        "name": "GITLAB variables (PRODUCTION) - eg. TAG=1.0&CONTENTFUL_PREVIEW=1"
       },
       {
         "id": "gitlabBadgeUrlPreprod",
         "type": "Symbol",
         "name": "GITLAB badge URL (PREPROD)"
       },
+      ({
+        "id": "gitlabBadgeUrlProduction",
+        "type": "Symbol",
+        "name": "GITLAB badge URL (PRODUCTION)"
+      },
       {
         "id": "gitlabBadgeUrlProduction",
         "type": "Symbol",
         "name": "GITLAB badge URL (PRODUCTION)"
-      }
+      })
     ]
   }
 }
