@@ -31,7 +31,7 @@
         "name": "GITLAB pipeline ref (PRODUCTION)"
       },
       {
-        "id": "gitlabPipelineVariablesPoduction",
+        "id": "gitlabPipelineVariablesProduction",
         "type": "Symbol",
         "name": "GITLAB variables (PRODUCTION) - eg. TAG=1.0&CONTENTFUL_PREVIEW=1"
       },

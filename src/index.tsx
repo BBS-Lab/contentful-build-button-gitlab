@@ -56,14 +56,14 @@ const SidebarExtension: FC<AppProps> = (props: AppProps) => {
       gitlabPipelineRefPreprod,
       gitlabPipelineVariablesPreprod,
       gitlabPipelineRefProduction,
-      gitlabPipelineVariablesPoduction,
+      gitlabPipelineVariablesProduction,
     } = installation
 
     setIsOpen(false)
 
     const pipelineUrl = `${gitlabBaseUrl}/trigger/pipeline`
     const pipelineRef = environment === 'preprod' ? gitlabPipelineRefPreprod : gitlabPipelineRefProduction
-    const variables = environment === 'preprod' ? gitlabPipelineVariablesPreprod : gitlabPipelineVariablesPoduction
+    const variables = environment === 'preprod' ? gitlabPipelineVariablesPreprod : gitlabPipelineVariablesProduction
 
     const formData = new FormData()
     formData.append('ref', pipelineRef)
