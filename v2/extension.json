@@ -1,0 +1,40 @@
+{
+  "id": "build-button-gitlab",
+  "name": "Déploiement site",
+  "src": "./build/index.html",
+  "sidebar": true,
+  "parameters": {
+    "installation": [
+      {
+        "id": "gitlabPipelineStaging",
+        "type": "Symbol",
+        "name": "GITLAB pipeline (STAGING)"
+      },
+      {
+        "id": "gitlabPipelinePreprod",
+        "type": "Symbol",
+        "name": "GITLAB pipeline (PREPROD)"
+      },
+      {
+        "id": "gitlabPipelineProduction",
+        "type": "Symbol",
+        "name": "GITLAB pipeline (PRODUCTION)"
+      },
+      {
+        "id": "gitlabBadgeUrlStaging",
+        "type": "Symbol",
+        "name": "GITLAB badge URL (STAGING)"
+      },
+      {
+        "id": "gitlabBadgeUrlPreprod",
+        "type": "Symbol",
+        "name": "GITLAB badge URL (PREPROD)"
+      },
+      {
+        "id": "gitlabBadgeUrlProduction",
+        "type": "Symbol",
+        "name": "GITLAB badge URL (PRODUCTION)"
+      }
+    ]
+  }
+}
